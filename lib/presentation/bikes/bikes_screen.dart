@@ -63,7 +63,7 @@ class BikeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.network(
-      thumbnailUrl,
+      url,
       fit: BoxFit.fill,
       loadingBuilder: (
         BuildContext context,
