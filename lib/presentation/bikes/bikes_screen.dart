@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hoegen_fietsverhuur/di.dart';
@@ -26,7 +28,8 @@ class _BikesContent extends StatelessWidget {
         builder: (context, state) => switch (state) {
           BikesLoadingState() => const CircularProgressIndicator(),
           BikesLoadedState() => GridView.count(
-              crossAxisCount: MediaQuery.of(context).size.width ~/ 400,
+              crossAxisCount:
+                  (MediaQuery.of(context).size.width ~/ 400).clamp(1, 100),
               children: state.bikes.map((e) {
                 return BikeTile(
                   id: e.id,
