@@ -1,10 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hoegen_fietsverhuur/di.dart';
 import 'package:hoegen_fietsverhuur/presentation/bikes/bikes_cubit.dart';
 import 'package:hoegen_fietsverhuur/presentation/bikes/bikes_state.dart';
+import 'package:hoegen_fietsverhuur/presentation/utils/transparent_image.dart';
 
 class BikesScreen extends StatelessWidget {
   const BikesScreen({super.key});
@@ -26,7 +25,8 @@ class _BikesContent extends StatelessWidget {
     return Scaffold(
       body: BlocBuilder<BikesCubit, BikesState>(
         builder: (context, state) => switch (state) {
-          BikesLoadingState() => const CircularProgressIndicator(),
+          BikesLoadingState() =>
+            const Center(child: CircularProgressIndicator()),
           BikesLoadedState() => GridView.count(
               crossAxisCount:
                   (MediaQuery.of(context).size.width ~/ 400).clamp(1, 100),
@@ -65,25 +65,16 @@ class BikeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      url,
-      fit: BoxFit.fill,
-      loadingBuilder: (
-        BuildContext context,
-        Widget child,
-        ImageChunkEvent? loadingProgress,
-      ) {
-        return loadingProgress == null
-            ? child
-            : Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-                ),
-              );
-      },
+    return Column(
+      children: [
+        Expanded(
+          child: FadeInImage.memoryNetwork(
+            placeholder: kTransparentImage,
+            image: url,
+          ),
+        ),
+        Text(title),
+      ],
     );
   }
 }
